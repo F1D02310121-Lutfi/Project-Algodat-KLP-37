@@ -1,9 +1,10 @@
-public class Obat {
-    String nama;
+public class Supply {
+    String nama, jenis;
     int jumlah;
 
-    public Obat(String nama, int jumlah) {
+    public Supply(String nama, String jenis, int jumlah) {
         this.nama = nama;
+        this.jenis = jenis;
         this.jumlah = jumlah;
     }
 
