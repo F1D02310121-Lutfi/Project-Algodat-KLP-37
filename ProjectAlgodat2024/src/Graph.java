@@ -1,6 +1,5 @@
 public class Graph {
     GraphNode head;
-    Path pathHead;
 
     public void addNode(String vertex) {
         GraphNode newNode = new GraphNode(vertex, Integer.MAX_VALUE);
@@ -11,7 +10,6 @@ public class Graph {
     public void addEdge(String source, String destination, int weight) {
         GraphNode sourceNode = findNode(source);
         GraphNode destNode = findNode(destination);
-
         if (sourceNode != null && destNode != null) {
             Neighbor newNeighbor = new Neighbor(destination, weight);
             newNeighbor.next = sourceNode.neighbors;
@@ -34,12 +32,11 @@ public class Graph {
         return null;
     }
 
-    public void dijkstra(String startVertex) {
+    public void displayRute(String startVertex) {
         GraphNode startNode = findNode(startVertex);
         if (startNode == null) return;
 
         startNode.distance = 0;
-
         GraphNode current = head;
         while (current != null) {
             GraphNode minNode = findMinDistanceNode();
@@ -47,7 +44,6 @@ public class Graph {
 
             minNode.visited = true;
             Neighbor neighbor = minNode.neighbors;
-
             while (neighbor != null) {
                 GraphNode neighborNode = findNode(neighbor.vertex);
                 if (!neighborNode.visited && minNode.distance != Integer.MAX_VALUE) {
@@ -61,16 +57,13 @@ public class Graph {
             }
             current = current.next;
         }
-
-        collectPaths(startVertex);
-        printPaths();
+        printPathsSorted(startVertex);
     }
 
     private GraphNode findMinDistanceNode() {
         GraphNode current = head;
         GraphNode minNode = null;
         int minDistance = Integer.MAX_VALUE;
-
         while (current != null) {
             if (!current.visited && current.distance < minDistance) {
                 minDistance = current.distance;
@@ -78,50 +71,48 @@ public class Graph {
             }
             current = current.next;
         }
-
         return minNode;
     }
 
-    private void collectPaths(String startVertex) {
+    private void printPathsSorted(String startVertex) {
+        GraphNode sortedHead = null;
         GraphNode current = head;
         while (current != null) {
             if (!current.vertex.equals(startVertex) && current.distance != Integer.MAX_VALUE) {
-                String path = buildPath(current, startVertex);
-                addPath(path, current.distance);
+                sortedHead = insertSorted(sortedHead, current);
             }
             current = current.next;
         }
-    }
 
-    private String buildPath(GraphNode node, String startVertex) {
-        if (node.prev != null) {
-            GraphNode prevNode = findNode(node.prev);
-            return buildPath(prevNode, startVertex) + " -> " + node.vertex + "(" + (node.distance - prevNode.distance) + ")";
-        } else {
-            return startVertex;
-        }
-    }
-
-    private void addPath(String path, int weight) {
-        Path newPath = new Path(path, weight);
-        if (pathHead == null || pathHead.weight > weight) {
-            newPath.next = pathHead;
-            pathHead = newPath;
-        } else {
-            Path current = pathHead;
-            while (current.next != null && current.next.weight <= weight) {
-                current = current.next;
-            }
-            newPath.next = current.next;
-            current.next = newPath;
-        }
-    }
-
-    private void printPaths() {
-        Path current = pathHead;
+        current = sortedHead;
         while (current != null) {
-            System.out.println("From " + current.path);
-            current = current.next;
+            String path = buildPath(current);
+            System.out.println("Dari " + path);
+            current = current.nextSorted;
         }
+    }
+
+    private GraphNode insertSorted(GraphNode sortedHead, GraphNode node) {
+        if (sortedHead == null || node.distance < sortedHead.distance) {
+            node.nextSorted = sortedHead;
+            return node;
+        }
+
+        GraphNode current = sortedHead;
+        while (current.nextSorted != null && current.nextSorted.distance <= node.distance) {
+            current = current.nextSorted;
+        }
+
+        node.nextSorted = current.nextSorted;
+        current.nextSorted = node;
+        return sortedHead;
+    }
+
+    private String buildPath(GraphNode node) {
+        if (node.prev == null) {
+            return node.vertex;
+        }
+        GraphNode prevNode = findNode(node.prev);
+        return buildPath(prevNode) + " -> " + node.vertex + " (" + (node.distance - prevNode.distance) + " km)";
     }
 }

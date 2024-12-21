@@ -12,5 +12,17 @@ public class PengirimanNode {
         this.jumlahObat = jumlahObat;
         this.next = null;
     }
+
+    public String getID(){
+        return this.idPengiriman;
+    }
+
+    public String getNama(){
+        return this.namaObat;
+    }
+
+    public int getJumlah(){
+        return this.jumlahObat;
+    }
 }
     

@@ -2,16 +2,18 @@ public class GraphNode {
     String vertex;
     int distance;
     boolean visited;
-    Neighbor neighbors;
-    GraphNode next;
     String prev;
+    GraphNode next;
+    GraphNode nextSorted;
+    Neighbor neighbors;
 
-    GraphNode(String vertex, int distance) {
+    public GraphNode(String vertex, int distance) {
         this.vertex = vertex;
         this.distance = distance;
         this.visited = false;
-        this.neighbors = null;
-        this.next = null;
         this.prev = null;
+        this.next = null;
+        this.nextSorted = null;
+        this.neighbors = null;
     }
 }
