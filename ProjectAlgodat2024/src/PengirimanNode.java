@@ -24,5 +24,13 @@ public class PengirimanNode {
     public int getJumlah(){
         return this.jumlahObat;
     }
+
+    public String getTujuan(){
+        return this.apotekTujuan;
+    }
+
+    public String getInformasi(){
+        return "ID Pengiriman: " + idPengiriman + ", Apotek Tujuan: " + apotekTujuan;
+    }
 }
     
