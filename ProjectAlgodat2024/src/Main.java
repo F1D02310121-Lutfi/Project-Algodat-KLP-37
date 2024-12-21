@@ -30,10 +30,7 @@ public class Main {
                 queuePengiriman.enqueue(anchor.getID());
                 anchor = anchor.next;
             }
-
-            System.out.println("TES QUWUWUWUWUUW");
-            queuePengiriman.cetakQueue();
-    
+            
             // Tambah data stack supply
             anchor = pengirimanList.head;
             while(anchor != null){
